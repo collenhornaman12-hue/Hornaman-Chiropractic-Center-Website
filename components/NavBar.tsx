@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-
-const CAL_URL = "https://cal.com/hornamanchiropracticcenter";
+import CalButton from "@/components/CalButton";
 
 export default function NavBar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -45,14 +43,9 @@ export default function NavBar() {
             >
               (814) 438-7242
             </a>
-            <Link
-              href={CAL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-yellow-green hover:bg-yellow-green-dark text-white font-bold text-sm px-4 py-2 rounded transition-colors whitespace-nowrap"
-            >
+            <CalButton className="bg-yellow-green hover:bg-yellow-green-dark text-white font-bold text-sm px-4 py-2 rounded transition-colors whitespace-nowrap cursor-pointer">
               Book Now
-            </Link>
+            </CalButton>
           </nav>
 
           {/* Mobile: phone + hamburger */}
@@ -92,15 +85,12 @@ export default function NavBar() {
                 {href.replace("#", "")}
               </a>
             ))}
-            <Link
-              href={CAL_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 bg-yellow-green hover:bg-yellow-green-dark text-white font-bold text-sm px-4 py-2 rounded text-center transition-colors"
+            <CalButton
+              className="mt-2 bg-yellow-green hover:bg-yellow-green-dark text-white font-bold text-sm px-4 py-2 rounded text-center transition-colors cursor-pointer"
               onClick={() => setMenuOpen(false)}
             >
               Book Now
-            </Link>
+            </CalButton>
           </nav>
         )}
       </div>

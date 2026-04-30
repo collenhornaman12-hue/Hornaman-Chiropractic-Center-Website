@@ -1,3 +1,5 @@
+import CalButton from "@/components/CalButton";
+
 const hours = [
   { day: "Monday", time: "9:00 AM – 6:00 PM" },
   { day: "Tuesday", time: "9:00 AM – 6:00 PM" },
@@ -54,14 +56,9 @@ export default function ContactSection() {
                   <span className="text-yellow-green text-lg">📅</span>
                   <div>
                     <p className="font-semibold">Online Booking</p>
-                    <a
-                      href="https://cal.com/hornamanchiropracticcenter"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-yellow-green hover:text-yellow-green-light transition-colors"
-                    >
-                      cal.com/hornamanchiropracticcenter
-                    </a>
+                    <CalButton className="text-yellow-green hover:text-yellow-green-light transition-colors text-sm bg-transparent border-0 p-0 cursor-pointer">
+                      Book an Appointment →
+                    </CalButton>
                   </div>
                 </div>
               </div>

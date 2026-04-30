@@ -1,6 +1,4 @@
-import Link from "next/link";
-
-const CAL_URL = "https://cal.com/hornamanchiropracticcenter";
+import CalButton from "@/components/CalButton";
 
 const highlights = [
   "Over 30 years serving Union City and Erie County",
@@ -64,14 +62,9 @@ export default function AboutSection() {
             </ul>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link
-                href={CAL_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-navy hover:bg-navy-darker text-white font-bold px-6 py-3 rounded text-center transition-colors"
-              >
+              <CalButton className="bg-navy hover:bg-navy-darker text-white font-bold px-6 py-3 rounded text-center transition-colors cursor-pointer">
                 Book an Appointment
-              </Link>
+              </CalButton>
               <a
                 href="#contact"
                 className="border-2 border-navy text-navy hover:bg-navy hover:text-white font-semibold px-6 py-3 rounded text-center transition-colors"

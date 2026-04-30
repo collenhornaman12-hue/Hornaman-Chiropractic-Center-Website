@@ -1,6 +1,4 @@
-import Link from "next/link";
-
-const CAL_URL = "https://cal.com/hornamanchiropracticcenter";
+import CalButton from "@/components/CalButton";
 
 export default function HeroSection() {
   return (
@@ -16,14 +14,9 @@ export default function HeroSection() {
           Dr. Thomas J. Hornaman &mdash; Serving the community for over 30 years
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href={CAL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-yellow-green hover:bg-yellow-green-dark text-white font-bold text-lg px-8 py-4 rounded transition-colors"
-          >
+          <CalButton className="bg-yellow-green hover:bg-yellow-green-dark text-white font-bold text-lg px-8 py-4 rounded transition-colors cursor-pointer">
             Book Your Appointment
-          </Link>
+          </CalButton>
           <a
             href="tel:+18144387242"
             className="border-2 border-white/40 hover:border-yellow-green text-white font-semibold text-lg px-8 py-4 rounded transition-colors"
