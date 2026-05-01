@@ -1,11 +1,24 @@
 import type { Metadata } from "next";
-import { Oswald } from "next/font/google";
+import { Oswald, Anton, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
 const oswald = Oswald({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-oswald",
+  display: "swap",
+});
+
+const anton = Anton({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-anton",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
   display: "swap",
 });
 
@@ -62,7 +75,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={oswald.variable}>
+    <html lang="en" className={`${oswald.variable} ${anton.variable} ${playfair.variable}`}>
       <head>
         <script
           type="application/ld+json"

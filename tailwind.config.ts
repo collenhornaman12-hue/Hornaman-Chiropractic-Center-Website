@@ -8,20 +8,20 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ["var(--font-oswald)", "Oswald", "sans-serif"],
-      },
       colors: {
         navy: {
-          DEFAULT: "#1a5c8a",
-          dark: "#0f3a57",
-          darker: "#134a72",
+          DEFAULT: "#203078",
+          dark: "#182560",
+          darker: "#101848",
         },
-        "yellow-green": {
-          DEFAULT: "#8fb339",
-          light: "#a8cc45",
-          dark: "#738f2d",
-        },
+        "yellow-green": "#c8d828",
+        "yellow-accent": "#d4b800",
+      },
+      fontFamily: {
+        display: ["Anton", "Impact", "sans-serif"],
+        heading: ["Oswald", "sans-serif"],
+        serif: ["Playfair Display", "Georgia", "serif"],
+        sans: ["var(--font-oswald)", "Oswald", "sans-serif"],
       },
     },
   },
