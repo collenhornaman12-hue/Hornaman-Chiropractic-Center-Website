@@ -1,5 +1,4 @@
 import Link from "next/link";
-import CalButton from "@/components/CalButton";
 
 export const metadata = {
   title: "Book an Appointment | Hornaman Chiropractic Center",
@@ -43,7 +42,10 @@ export default function BookPage() {
           </Link>
 
           {/* Existing Patient */}
-          <div className="bg-white rounded-2xl border-2 border-navy/10 hover:border-yellow-green p-8 flex flex-col items-center text-center transition-all hover:shadow-lg cursor-pointer group">
+          <Link
+            href="/existing-patient"
+            className="group bg-white rounded-2xl border-2 border-navy/10 hover:border-yellow-green p-8 flex flex-col items-center text-center transition-all hover:shadow-lg"
+          >
             <div className="w-16 h-16 bg-navy/5 group-hover:bg-yellow-green/10 rounded-full flex items-center justify-center mb-4 transition-colors">
               <svg className="w-8 h-8 text-navy group-hover:text-yellow-green transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
@@ -53,10 +55,10 @@ export default function BookPage() {
             <p className="text-gray-500 text-sm leading-relaxed mb-4">
               You&apos;ve been seen by Dr. Hornaman within the last 3 years.
             </p>
-            <CalButton className="text-yellow-green font-semibold text-sm group-hover:underline cursor-pointer">
-              Book Online →
-            </CalButton>
-          </div>
+            <span className="text-yellow-green font-semibold text-sm group-hover:underline">
+              Complete Details Form →
+            </span>
+          </Link>
         </div>
 
         {/* Phone option */}

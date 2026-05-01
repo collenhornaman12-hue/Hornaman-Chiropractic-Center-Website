@@ -1,30 +1,30 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { submitNewPatient } from "./actions";
+import { submitExistingPatient } from "./actions";
 
-export const metadata = {
-  title: "New Patient Intake | Hornaman Chiropractic Center",
-  description: "New patient intake form for Hornaman Chiropractic Center, Union City, PA.",
-};
+export default function ExistingPatientPage() {
+  const [insuranceChanged, setInsuranceChanged] = useState(false);
 
-export default function NewPatientPage() {
   return (
     <main className="min-h-screen bg-gray-50 py-16 px-4 sm:px-6">
       <div className="max-w-2xl mx-auto">
-        <Link href="/" className="text-sm text-yellow-green font-semibold hover:underline mb-8 inline-block">
-          ← Back to Home
+        <Link href="/book" className="text-sm text-yellow-green font-semibold hover:underline mb-8 inline-block">
+          ← Back to Booking
         </Link>
 
         <div className="mb-8">
-          <p className="text-yellow-green font-semibold text-sm uppercase tracking-widest mb-1">New Patients</p>
-          <h1 className="text-3xl font-bold text-navy mb-2">New Patient Intake Form</h1>
+          <p className="text-yellow-green font-semibold text-sm uppercase tracking-widest mb-1">Existing Patients</p>
+          <h1 className="text-3xl font-bold text-navy mb-2">Patient Details</h1>
           <p className="text-gray-500 text-sm">
-            Please complete this form before your first visit. All information is kept strictly confidential in accordance with HIPAA.
-            If you have been seen by Dr. Hornaman within the last 3 years, please use the{" "}
-            <Link href="/book" className="text-yellow-green hover:underline font-medium">existing patient booking</Link> instead.
+            Please complete your details before your visit. All information is kept strictly confidential in accordance with HIPAA.
+            If you haven&apos;t been seen in over 3 years, please use the{" "}
+            <Link href="/new-patient" className="text-yellow-green hover:underline font-medium">new patient intake</Link> instead.
           </p>
         </div>
 
-        <form action={submitNewPatient} className="space-y-8">
+        <form action={submitExistingPatient} className="space-y-8">
           {/* Personal Information */}
           <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
             <h2 className="text-lg font-bold text-navy mb-5 pb-3 border-b border-gray-100">Personal Information</h2>
@@ -106,60 +106,62 @@ export default function NewPatientPage() {
             </div>
           </section>
 
-          {/* Insurance Information */}
+          {/* Insurance */}
           <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-navy mb-1 pb-3 border-b border-gray-100">Insurance Information</h2>
-            <p className="text-xs text-gray-400 mt-3 mb-4">
-              Not sure if we accept your insurance?{" "}
-              <Link href="/insurance" className="text-yellow-green hover:underline">View accepted insurances →</Link>
-            </p>
+            <h2 className="text-lg font-bold text-navy mb-5 pb-3 border-b border-gray-100">Insurance</h2>
             <div className="mb-4">
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Payment Type <span className="text-red-500">*</span></label>
-              <div className="flex gap-4">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Has your insurance changed since your last visit? <span className="text-red-500">*</span>
+              </label>
+              <div className="flex gap-6">
                 <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                  <input type="radio" name="paymentType" value="insurance" defaultChecked className="accent-yellow-green" />
-                  Insurance
+                  <input
+                    type="radio"
+                    name="insuranceChanged"
+                    value="no"
+                    defaultChecked
+                    onChange={() => setInsuranceChanged(false)}
+                    className="accent-yellow-green"
+                  />
+                  No — use insurance on file
                 </label>
                 <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                  <input type="radio" name="paymentType" value="self-pay" className="accent-yellow-green" />
-                  Self-Pay
-                </label>
-                <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                  <input type="radio" name="paymentType" value="medicare" className="accent-yellow-green" />
-                  Medicare
+                  <input
+                    type="radio"
+                    name="insuranceChanged"
+                    value="yes"
+                    onChange={() => setInsuranceChanged(true)}
+                    className="accent-yellow-green"
+                  />
+                  Yes — my insurance has changed
                 </label>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Insurance Provider</label>
-                <input type="text" name="insuranceProvider" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" placeholder="e.g. Blue Cross Blue Shield" />
+            {insuranceChanged && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 pt-4 border-t border-gray-100">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">New Insurance Provider</label>
+                  <input type="text" name="insuranceProvider" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" placeholder="e.g. Blue Cross Blue Shield" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Policy / Member ID</label>
+                  <input type="text" name="insurancePolicyId" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Group Number</label>
+                  <input type="text" name="insuranceGroupNumber" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Policy / Member ID</label>
-                <input type="text" name="insurancePolicyId" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Group Number</label>
-                <input type="text" name="insuranceGroupNumber" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Insurance Phone Number</label>
-                <input type="tel" name="insurancePhone" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Name of Insured (if different from patient)</label>
-                <input type="text" name="insuredName" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
-              </div>
-            </div>
+            )}
           </section>
 
-          {/* Reason for Visit */}
+          {/* Reason for Visit (optional) */}
           <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-navy mb-5 pb-3 border-b border-gray-100">Reason for Visit</h2>
+            <h2 className="text-lg font-bold text-navy mb-1 pb-3 border-b border-gray-100">Reason for Visit</h2>
+            <p className="text-xs text-gray-400 mt-3 mb-4">All fields in this section are optional.</p>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Primary Complaint <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Primary Complaint</label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {["Back Pain","Neck Pain","Headaches","Sciatica","Shoulder Pain","Hip Pain","Auto Accident","Sports Injury","Posture Issues","Other"].map((item) => (
                     <label key={item} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
@@ -170,8 +172,8 @@ export default function NewPatientPage() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">How long have you had this condition? <span className="text-red-500">*</span></label>
-                <select name="conditionDuration" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent">
+                <label className="block text-sm font-semibold text-gray-700 mb-1">How long have you had this condition?</label>
+                <select name="conditionDuration" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent">
                   <option value="">Select</option>
                   <option>Less than 1 week</option>
                   <option>1–4 weeks</option>
@@ -190,38 +192,9 @@ export default function NewPatientPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Have you had chiropractic care before?</label>
-                <div className="flex gap-4">
-                  <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                    <input type="radio" name="priorChiro" value="yes" className="accent-yellow-green" /> Yes
-                  </label>
-                  <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
-                    <input type="radio" name="priorChiro" value="no" className="accent-yellow-green" /> No
-                  </label>
-                </div>
-              </div>
-              <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Additional notes or questions for Dr. Hornaman</label>
                 <textarea name="notes" rows={4} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent resize-none" placeholder="Tell us anything else we should know before your visit..." />
               </div>
-            </div>
-          </section>
-
-          {/* How did you hear about us */}
-          <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-navy mb-5 pb-3 border-b border-gray-100">One More Thing</h2>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">How did you hear about us?</label>
-              <select name="referralSource" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent">
-                <option value="">Select</option>
-                <option>Google Search</option>
-                <option>Friend or Family Referral</option>
-                <option>Doctor Referral</option>
-                <option>Facebook</option>
-                <option>Instagram</option>
-                <option>Drive By / Signage</option>
-                <option>Other</option>
-              </select>
             </div>
           </section>
 
@@ -245,11 +218,10 @@ export default function NewPatientPage() {
             type="submit"
             className="w-full bg-navy text-white font-bold py-4 rounded-xl text-base hover:bg-navy/90 transition-colors"
           >
-            Submit New Patient Intake Form
+            Submit Patient Details
           </button>
 
           <p className="text-center text-xs text-gray-400">
-            After submitting, our office will contact you within 1 business day to confirm your appointment.
             Questions? Call us at{" "}
             <a href="tel:+18144387242" className="text-yellow-green hover:underline">(814) 438-7242</a>
           </p>
