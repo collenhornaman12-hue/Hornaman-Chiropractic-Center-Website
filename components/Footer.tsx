@@ -1,64 +1,97 @@
-export default function Footer() {
-  const year = new Date().getFullYear();
+import CalButton from "@/components/CalButton";
 
+export default function Footer() {
   return (
-    <footer className="bg-navy-dark text-white/70 text-sm">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
+    <footer className="bg-navy-dark border-t border-white/10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-yellow-green text-xl">⚕</span>
-              <p className="text-white font-bold text-sm leading-tight">
+            <div className="mb-3">
+              <span className="text-white font-bold text-lg leading-tight block">
                 Hornaman Chiropractic Center
-              </p>
+              </span>
+              <span className="text-yellow-green text-xs font-semibold uppercase tracking-widest">
+                Providing Care Since 1993
+              </span>
             </div>
-            <p className="text-xs leading-relaxed">
-              Compassionate chiropractic care for the whole family in Union City,
-              Pennsylvania.
+            <p className="text-white/50 text-sm leading-relaxed">
+              Compassionate chiropractic care for the whole family in Union
+              City, Pennsylvania.
             </p>
           </div>
 
           {/* Contact */}
           <div>
-            <h3 className="text-white font-semibold text-xs uppercase tracking-widest mb-3">
+            <h4 className="text-white font-semibold text-sm uppercase tracking-widest mb-4">
               Contact
-            </h3>
-            <address className="not-italic space-y-1 text-xs">
+            </h4>
+            <address className="not-italic text-white/60 text-sm space-y-1">
               <p>107 N. Main St.</p>
               <p>Union City, PA 16438</p>
-              <p className="mt-2">
-                <a href="tel:+18144387242" className="text-yellow-green hover:text-yellow-green-light transition-colors">
-                  (814) 438-7242
-                </a>
-              </p>
+              <a
+                href="tel:+18144387242"
+                className="block hover:text-white transition-colors mt-2"
+              >
+                (814) 438-7242
+              </a>
             </address>
           </div>
 
-          {/* Nav links */}
+          {/* Navigate */}
           <div>
-            <h3 className="text-white font-semibold text-xs uppercase tracking-widest mb-3">
+            <h4 className="text-white font-semibold text-sm uppercase tracking-widest mb-4">
               Navigate
-            </h3>
-            <nav className="flex flex-col gap-2 text-xs">
-              <a href="#services" className="hover:text-yellow-green transition-colors">Services</a>
-              <a href="#conditions" className="hover:text-yellow-green transition-colors">Conditions Treated</a>
-              <a href="#about" className="hover:text-yellow-green transition-colors">About Dr. Hornaman</a>
-              <a href="#contact" className="hover:text-yellow-green transition-colors">Contact &amp; Location</a>
-              <a
-                href="https://cal.com/hornamanchiropracticcenter"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-yellow-green hover:text-yellow-green-light transition-colors font-semibold"
-              >
-                Book an Appointment →
-              </a>
-            </nav>
+            </h4>
+            <ul className="space-y-2 text-sm text-white/60">
+              <li>
+                <a href="#services" className="hover:text-white transition-colors">
+                  Services
+                </a>
+              </li>
+              <li>
+                <a href="#conditions" className="hover:text-white transition-colors">
+                  Conditions Treated
+                </a>
+              </li>
+              <li>
+                <a href="#about" className="hover:text-white transition-colors">
+                  About Dr. Hornaman
+                </a>
+              </li>
+              <li>
+                <a href="#contact" className="hover:text-white transition-colors">
+                  Contact &amp; Location
+                </a>
+              </li>
+              <li>
+                <CalButton className="hover:text-white transition-colors cursor-pointer">
+                  Book an Appointment →
+                </CalButton>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-6 text-xs text-center text-white/40">
-          &copy; {year} Hornaman Chiropractic Center &mdash; Union City, PA. All rights reserved.
+        {/* Bottom bar */}
+        <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-white/30 text-xs">
+            © {new Date().getFullYear()} Hornaman Chiropractic Center — Union City, PA. All rights reserved.
+          </p>
+          <div className="flex flex-wrap gap-4 text-xs text-white/30">
+            <a href="/privacy-policy" className="hover:text-white/60 transition-colors">
+              Privacy Policy
+            </a>
+            <a href="/hipaa-policy" className="hover:text-white/60 transition-colors">
+              HIPAA Policy
+            </a>
+            <a href="/healthcare-disclaimer" className="hover:text-white/60 transition-colors">
+              Healthcare Disclaimer
+            </a>
+            <a href="/accessibility" className="hover:text-white/60 transition-colors">
+              Accessibility
+            </a>
+          </div>
         </div>
       </div>
     </footer>
