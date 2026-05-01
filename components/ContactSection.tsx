@@ -111,22 +111,6 @@ export default function ContactSection() {
               </table>
             </div>
 
-            {/* New Patient CTA */}
-            <div className="mt-6 bg-navy rounded-xl p-6">
-              <p className="text-yellow-green font-semibold text-sm uppercase tracking-widest mb-1">
-                New Patients Welcome
-              </p>
-              <h4 className="text-white text-xl font-bold mb-2">
-                Free Consultation for New Patients
-              </h4>
-              <p className="text-white/70 text-sm mb-4">
-                Not sure if chiropractic care is right for you? Come in with no
-                obligation and let Dr. Hornaman assess your condition.
-              </p>
-              <CalButton className="bg-yellow-green text-navy font-bold px-5 py-2.5 rounded text-sm hover:opacity-90 transition-opacity cursor-pointer inline-block">
-                Claim Your Free Consultation
-              </CalButton>
-            </div>
           </div>
         </div>
       </div>

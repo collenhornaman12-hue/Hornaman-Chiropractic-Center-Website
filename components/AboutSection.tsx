@@ -13,9 +13,9 @@ export default function AboutSection() {
   return (
     <section id="about" className="bg-[#203078] py-20 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
           {/* Billboard image */}
-          <div className="order-2 lg:order-1">
+          <div className="order-2 lg:order-1 lg:col-span-3">
             <Image
               src="/images/about_billboard.jpg"
               alt="Dr. Thomas J. Hornaman — Hornaman Chiropractic Center"
@@ -27,7 +27,7 @@ export default function AboutSection() {
           </div>
 
           {/* Text */}
-          <div className="order-1 lg:order-2">
+          <div className="order-1 lg:order-2 lg:col-span-2">
             <p className="text-[#c8d828] font-semibold text-sm uppercase tracking-widest mb-2">
               About Our Practice
             </p>

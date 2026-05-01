@@ -1,7 +1,7 @@
 export default function HeroSection() {
   return (
     <section id="home" className="bg-[#203078]">
-      <div className="w-full">
+      <div className="w-[90%] mx-auto">
         <img
           src="/images/hero_billboard.jpg"
           alt="Got Pain? Think Chiropractic. — Dr. Thomas J. Hornaman"
@@ -21,11 +21,9 @@ export default function HeroSection() {
               Call (814) 438-7242
             </a>
           </div>
-          <div className="inline-flex items-center gap-2 border border-[#c8d828]/40 rounded-full px-4 py-2">
-            <span className="w-2 h-2 rounded-full bg-[#c8d828] animate-pulse" />
-            <span className="text-white/80 text-sm">
-              Same-week appointments available — call or book online before we fill up.
-            </span>
+          <div className="inline-flex items-center gap-2 border border-[#c8d828]/40 rounded-full px-5 py-2.5">
+            <span className="w-2 h-2 rounded-full bg-[#c8d828] animate-pulse flex-shrink-0" />
+            <span className="text-white text-base font-medium">Same-week appointments available — call or book online before we fill up.</span>
           </div>
         </div>
       </div>
