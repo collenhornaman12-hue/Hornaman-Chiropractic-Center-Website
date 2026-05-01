@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import CalButton from "@/components/CalButton";
 
 const navLinks = [
@@ -46,10 +46,12 @@ export default function NavBar() {
           ))}
 
           {/* New Patients dropdown — pure CSS group-hover, no gap */}
-          <div className="relative group">
+          <div className="relative group flex items-center">
             <button className="flex items-center gap-1 text-white/80 hover:text-white text-sm font-medium transition-colors pb-2">
               New Patients
-              <ChevronDown className="w-3.5 h-3.5 transition-transform duration-150 group-hover:rotate-180" />
+              <svg className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
             </button>
             <div className="absolute top-full left-0 hidden group-hover:block pt-1">
               <div className="bg-white rounded-xl shadow-lg border border-gray-100 py-2 min-w-48">
