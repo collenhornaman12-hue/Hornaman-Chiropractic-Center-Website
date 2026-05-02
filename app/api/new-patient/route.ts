@@ -84,5 +84,29 @@ REFERRAL SOURCE: ${fields.referralSource || "Not specified"}
     console.error("Email send failed:", e);
   }
 
+  try {
+    await fetch(`${process.env.SUPABASE_URL}/rest/v1/patient_intake`, {
+      method: "POST",
+      headers: {
+        apikey: process.env.SUPABASE_SERVICE_KEY!,
+        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify({
+        type: "new",
+        name: `${fields.firstName} ${fields.lastName}`,
+        phone: fields.phone,
+        email: fields.email,
+        dob: fields.dob,
+        insurance: fields.insuranceProvider || fields.paymentType || null,
+        chief_complaint: fields.complaints || null,
+        raw_data: fields,
+      }),
+    });
+  } catch (e) {
+    console.error("Supabase insert failed:", e);
+  }
+
   return NextResponse.json({ success: true });
 }

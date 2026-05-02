@@ -24,6 +24,7 @@ export async function POST(request: NextRequest) {
     insuranceProvider: formData.get("insuranceProvider") as string,
     insurancePolicyId: formData.get("insurancePolicyId") as string,
     insuranceGroupNumber: formData.get("insuranceGroupNumber") as string,
+    insuranceChanged: formData.get("insuranceChanged") as string,
     complaints: formData.getAll("complaint").join(", "),
     conditionDuration: formData.get("conditionDuration") as string,
     painLevel: formData.get("painLevel") as string,
@@ -78,6 +79,30 @@ Notes: ${fields.notes || "None"}
     });
   } catch (e) {
     console.error("Email send failed:", e);
+  }
+
+  try {
+    await fetch(`${process.env.SUPABASE_URL}/rest/v1/patient_intake`, {
+      method: "POST",
+      headers: {
+        apikey: process.env.SUPABASE_SERVICE_KEY!,
+        Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify({
+        type: "existing",
+        name: `${fields.firstName} ${fields.lastName}`,
+        phone: fields.phone,
+        email: fields.email,
+        dob: fields.dob,
+        insurance: insuranceChanged ? fields.insuranceProvider || "Changed — see raw data" : "On file",
+        chief_complaint: fields.complaints || null,
+        raw_data: fields,
+      }),
+    });
+  } catch (e) {
+    console.error("Supabase insert failed:", e);
   }
 
   return NextResponse.json({ success: true });
