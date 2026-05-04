@@ -7,6 +7,7 @@ import Link from "next/link";
 export default function NewPatientPage() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [hadScans, setHadScans] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -19,9 +20,22 @@ export default function NewPatientPage() {
   return (
     <main className="min-h-screen bg-gray-50 py-16 px-4 sm:px-6">
       <div className="max-w-2xl mx-auto">
-        <Link href="/" className="text-sm text-yellow-green font-semibold hover:underline mb-8 inline-block">
-          ← Back to Home
+        <Link href="/book" className="text-sm text-yellow-green font-semibold hover:underline mb-8 inline-block">
+          ← Back to Booking
         </Link>
+
+        {/* Step indicator */}
+        <div className="flex items-center gap-3 mb-8 bg-[#203078] rounded-xl px-5 py-3">
+          <div className="flex items-center gap-2 flex-1">
+            <span className="w-6 h-6 rounded-full bg-[#c8d828] text-[#203078] text-xs font-bold flex items-center justify-center flex-shrink-0" style={{ fontFamily: "'Oswald', sans-serif" }}>1</span>
+            <span className="text-white text-sm font-semibold" style={{ fontFamily: "'Oswald', sans-serif" }}>Complete intake form</span>
+          </div>
+          <div className="w-px h-5 bg-white/20" />
+          <div className="flex items-center gap-2 flex-1 opacity-50">
+            <span className="w-6 h-6 rounded-full border-2 border-white/40 text-white/60 text-xs font-bold flex items-center justify-center flex-shrink-0" style={{ fontFamily: "'Oswald', sans-serif" }}>2</span>
+            <span className="text-white/60 text-sm font-semibold" style={{ fontFamily: "'Oswald', sans-serif" }}>Choose appointment time</span>
+          </div>
+        </div>
 
         <div className="mb-8">
           <p className="text-yellow-green font-semibold text-sm uppercase tracking-widest mb-1">New Patients</p>
@@ -29,12 +43,13 @@ export default function NewPatientPage() {
           <p className="text-gray-500 text-sm">
             Please complete this form before your first visit. All information is kept strictly confidential in accordance with HIPAA.
             If you have been seen by Dr. Hornaman within the last 3 years, please use the{" "}
-            <Link href="/book" className="text-yellow-green hover:underline font-medium">existing patient booking</Link> instead.
+            <Link href="/existing-patient" className="text-yellow-green hover:underline font-medium">existing patient form</Link> instead.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Personal Information */}
+
+          {/* 1 — Personal Information */}
           <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
             <h2 className="text-lg font-bold text-navy mb-5 pb-3 border-b border-gray-100">Personal Information</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -68,54 +83,28 @@ export default function NewPatientPage() {
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Email Address <span className="text-red-500">*</span></label>
                 <input type="email" name="email" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
               </div>
-            </div>
-          </section>
-
-          {/* Home Address */}
-          <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-navy mb-5 pb-3 border-b border-gray-100">Home Address</h2>
-            <div className="grid grid-cols-1 gap-4">
-              <div>
+              <div className="sm:col-span-2">
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Street Address <span className="text-red-500">*</span></label>
                 <input type="text" name="address" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="sm:col-span-1">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">City <span className="text-red-500">*</span></label>
-                  <input type="text" name="city" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
-                </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">City <span className="text-red-500">*</span></label>
+                <input type="text" name="city" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">State <span className="text-red-500">*</span></label>
                   <input type="text" name="state" required defaultValue="PA" className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">ZIP Code <span className="text-red-500">*</span></label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">ZIP <span className="text-red-500">*</span></label>
                   <input type="text" name="zip" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Emergency Contact */}
-          <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
-            <h2 className="text-lg font-bold text-navy mb-5 pb-3 border-b border-gray-100">Emergency Contact</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Full Name <span className="text-red-500">*</span></label>
-                <input type="text" name="emergencyName" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Relationship <span className="text-red-500">*</span></label>
-                <input type="text" name="emergencyRelationship" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" placeholder="e.g. Spouse, Parent" />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">Phone Number <span className="text-red-500">*</span></label>
-                <input type="tel" name="emergencyPhone" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
-              </div>
-            </div>
-          </section>
-
-          {/* Insurance Information */}
+          {/* 2 — Insurance Information */}
           <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
             <h2 className="text-lg font-bold text-navy mb-1 pb-3 border-b border-gray-100">Insurance Information</h2>
             <p className="text-xs text-gray-400 mt-3 mb-4">
@@ -163,7 +152,77 @@ export default function NewPatientPage() {
             </div>
           </section>
 
-          {/* Reason for Visit */}
+          {/* 3 — Medical History */}
+          <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+            <h2 className="text-lg font-bold text-navy mb-5 pb-3 border-b border-gray-100">Medical History</h2>
+            <div className="space-y-5">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Do you have any of the following conditions?</label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {[
+                    "Osteoporosis",
+                    "Blood clotting disorder",
+                    "Recent surgery (within 6 months)",
+                    "Cancer / tumor history",
+                    "Spinal cord injury",
+                    "Rheumatoid arthritis",
+                    "None of the above",
+                  ].map((item) => (
+                    <label key={item} className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                      <input type="checkbox" name="medicalCondition" value={item} className="accent-yellow-green" />
+                      {item}
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Current medications <span className="text-gray-400 font-normal">(list any that may affect treatment, e.g. blood thinners)</span>
+                </label>
+                <textarea name="medications" rows={3} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent resize-none" placeholder="Optional" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Have you had any recent X-rays, MRI, or CT scans related to your current condition?
+                </label>
+                <div className="flex gap-4 mb-3">
+                  <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                    <input type="radio" name="recentScans" value="yes" onChange={() => setHadScans(true)} className="accent-yellow-green" /> Yes
+                  </label>
+                  <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                    <input type="radio" name="recentScans" value="no" defaultChecked onChange={() => setHadScans(false)} className="accent-yellow-green" /> No
+                  </label>
+                </div>
+                {hadScans && (
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Please describe:</label>
+                    <textarea name="scanDescription" rows={3} className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent resize-none" placeholder="When, where, and what was found..." />
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
+
+          {/* 4 — Emergency Contact */}
+          <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+            <h2 className="text-lg font-bold text-navy mb-5 pb-3 border-b border-gray-100">Emergency Contact</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Full Name <span className="text-red-500">*</span></label>
+                <input type="text" name="emergencyName" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Relationship <span className="text-red-500">*</span></label>
+                <input type="text" name="emergencyRelationship" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" placeholder="e.g. Spouse, Parent" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Phone Number <span className="text-red-500">*</span></label>
+                <input type="tel" name="emergencyPhone" required className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-green focus:border-transparent" />
+              </div>
+            </div>
+          </section>
+
+          {/* 5 — Reason for Visit */}
           <section className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
             <h2 className="text-lg font-bold text-navy mb-5 pb-3 border-b border-gray-100">Reason for Visit</h2>
             <div className="space-y-4">
@@ -234,7 +293,7 @@ export default function NewPatientPage() {
             </div>
           </section>
 
-          {/* HIPAA Consent */}
+          {/* 6 — HIPAA Consent */}
           <section className="bg-navy/5 rounded-xl border border-navy/10 p-6">
             <h2 className="text-base font-bold text-navy mb-3">HIPAA Consent &amp; Authorization</h2>
             <p className="text-xs text-gray-600 leading-relaxed mb-4">
@@ -255,11 +314,11 @@ export default function NewPatientPage() {
             disabled={submitting}
             className="w-full bg-navy text-white font-bold py-4 rounded-xl text-base hover:bg-navy/90 transition-colors disabled:opacity-60"
           >
-            {submitting ? "Submitting…" : "Submit New Patient Intake Form"}
+            {submitting ? "Submitting…" : "Submit & Choose Appointment Time →"}
           </button>
 
           <p className="text-center text-xs text-gray-400">
-            After submitting, our office will contact you within 1 business day to confirm your appointment.
+            After submitting, you&apos;ll be taken to our calendar to choose your appointment time.
             Questions? Call us at{" "}
             <a href="tel:+18144387242" className="text-yellow-green hover:underline">(814) 438-7242</a>
           </p>

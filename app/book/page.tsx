@@ -2,7 +2,13 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Book an Appointment | Hornaman Chiropractic Center",
-  description: "Book a chiropractic appointment with Dr. Thomas J. Hornaman in Union City, PA.",
+  description: "Book a chiropractic appointment with Dr. Thomas J. Hornaman in Union City, PA. New and existing patients welcome.",
+  alternates: { canonical: "https://hornamanchiropracticcenter.com/book" },
+  openGraph: {
+    title: "Book an Appointment | Hornaman Chiropractic Center",
+    description: "Schedule your chiropractic visit with Dr. Thomas Hornaman in Union City, PA. New and existing patients welcome.",
+    url: "https://hornamanchiropracticcenter.com/book",
+  },
 };
 
 export default function BookPage() {
@@ -21,6 +27,19 @@ export default function BookPage() {
           </p>
         </div>
 
+        {/* Step indicator */}
+        <div className="flex items-center gap-3 mb-6 bg-[#203078] rounded-xl px-5 py-3">
+          <div className="flex items-center gap-2 flex-1">
+            <span className="w-6 h-6 rounded-full bg-[#c8d828] text-[#203078] text-xs font-bold flex items-center justify-center flex-shrink-0" style={{ fontFamily: "'Oswald', sans-serif" }}>1</span>
+            <span className="text-white text-sm font-semibold" style={{ fontFamily: "'Oswald', sans-serif" }}>Complete intake form</span>
+          </div>
+          <div className="w-px h-5 bg-white/20" />
+          <div className="flex items-center gap-2 flex-1 opacity-50">
+            <span className="w-6 h-6 rounded-full border-2 border-white/40 text-white/60 text-xs font-bold flex items-center justify-center flex-shrink-0" style={{ fontFamily: "'Oswald', sans-serif" }}>2</span>
+            <span className="text-white/60 text-sm font-semibold" style={{ fontFamily: "'Oswald', sans-serif" }}>Choose appointment time</span>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
           {/* New Patient */}
           <Link
@@ -37,7 +56,7 @@ export default function BookPage() {
               First time visiting Dr. Hornaman, or haven&apos;t been seen in over 3 years.
             </p>
             <span className="text-yellow-green font-semibold text-sm group-hover:underline">
-              Complete Intake Form →
+              Step 1 — Complete Intake Form →
             </span>
           </Link>
 
@@ -56,7 +75,7 @@ export default function BookPage() {
               You&apos;ve been seen by Dr. Hornaman within the last 3 years.
             </p>
             <span className="text-yellow-green font-semibold text-sm group-hover:underline">
-              Complete Details Form →
+              Step 1 — Complete Details Form →
             </span>
           </Link>
         </div>

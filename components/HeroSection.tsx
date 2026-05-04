@@ -23,7 +23,7 @@ export default function HeroSection() {
           </div>
           <div className="inline-flex items-center gap-2 border border-[#c8d828]/40 rounded-full px-5 py-2.5">
             <span className="w-2 h-2 rounded-full bg-[#c8d828] animate-pulse flex-shrink-0" />
-            <span className="text-white text-base font-medium">Same-week appointments available — call or book online before we fill up.</span>
+            <span className="text-white text-base font-medium">Same-week appointments available — appointments fill quickly.</span>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ const stats = [
   { value: "30+", label: "Years in Practice" },
   { value: "1,000+", label: "Patients Helped" },
   { value: "5-Star", label: "Google Rated" },
-  { value: "Same Week", label: "Appointments Available" },
+  { value: "Same-Week", label: "Appointments Available" },
 ];
 
 export default function TrustStrip() {

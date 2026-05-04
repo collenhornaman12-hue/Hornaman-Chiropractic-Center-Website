@@ -229,12 +229,12 @@ export default function ExistingPatientPage() {
             disabled={submitting}
             className="w-full bg-navy text-white font-bold py-4 rounded-xl text-base hover:bg-navy/90 transition-colors disabled:opacity-60"
           >
-            {submitting ? "Submitting…" : "Submit Patient Details"}
+            {submitting ? "Submitting…" : "Submit & Choose Appointment Time →"}
           </button>
 
           <p className="text-center text-xs text-gray-400">
-            Questions? Call us at{" "}
-            <a href="tel:+18144387242" className="text-yellow-green hover:underline">(814) 438-7242</a>
+            After submitting, you&apos;ll be taken to our calendar to choose your appointment time. Questions? Call us at{" "}
+            <a href="tel:+18144387242" className="text-yellow-green hover:underline">(814) 438-7242</a>.
           </p>
         </form>
       </div>

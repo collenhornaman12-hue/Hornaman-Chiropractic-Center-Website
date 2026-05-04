@@ -3,7 +3,13 @@ import CalButton from "@/components/CalButton";
 
 export const metadata = {
   title: "Accepted Insurance | Hornaman Chiropractic Center",
-  description: "View insurance plans accepted at Hornaman Chiropractic Center in Union City, PA.",
+  description: "Hornaman Chiropractic Center accepts Blue Cross Blue Shield, Highmark, Medicare, UPMC, Aetna, Cigna, and more in Union City, PA.",
+  alternates: { canonical: "https://hornamanchiropracticcenter.com/insurance" },
+  openGraph: {
+    title: "Accepted Insurance | Hornaman Chiropractic Center",
+    description: "We accept most major insurance plans including BCBS, Highmark, Medicare, UPMC, and more. Workers' comp and auto injury cases welcome.",
+    url: "https://hornamanchiropracticcenter.com/insurance",
+  },
 };
 
 const insurers = [
