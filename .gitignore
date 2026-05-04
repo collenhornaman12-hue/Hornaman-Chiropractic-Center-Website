@@ -8,6 +8,9 @@ node_modules/
 # Env files
 .env*.local
 
+# Build output
+.vercel/
+
 # Misc
 .DS_Store
 *.pem
