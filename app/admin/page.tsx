@@ -1,9 +1,7 @@
 export const runtime = "edge";
-
-import { headers } from "next/headers";
+import { cookies } from "next/headers";
 import AdminDashboard from "./AdminDashboard";
 import PasswordGate from "./PasswordGate";
-
 export const dynamic = "force-dynamic";
 
 type Intake = {
@@ -34,18 +32,14 @@ async function getIntakes(): Promise<Intake[]> {
   return res.json();
 }
 
-export default async function AdminPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ pw?: string }>;
-}) {
-  const params = await searchParams;
-  const pw = params.pw ?? "";
+export default async function AdminPage() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get("admin_session");
 
-  if (pw !== process.env.ADMIN_PASSWORD) {
+  if (session?.value !== "authenticated") {
     return <PasswordGate />;
   }
 
   const intakes = await getIntakes();
-  return <AdminDashboard intakes={intakes} pw={pw} />;
+  return <AdminDashboard intakes={intakes} />;
 }

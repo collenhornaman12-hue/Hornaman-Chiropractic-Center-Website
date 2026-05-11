@@ -32,7 +32,7 @@ function relativeTime(iso: string): string {
   return `${Math.floor(hrs / 24)}d ago`;
 }
 
-function IntakeCard({ intake, pw }: { intake: Intake; pw: string }) {
+function IntakeCard({ intake }: { intake: Intake }) {
   const [status, setStatus] = useState(intake.status || "pending");
   const [saving, setSaving] = useState(false);
 
@@ -117,10 +117,8 @@ function IntakeCard({ intake, pw }: { intake: Intake; pw: string }) {
 
 export default function AdminDashboard({
   intakes,
-  pw,
 }: {
   intakes: Intake[];
-  pw: string;
 }) {
   const [filter, setFilter] = useState<string>("all");
 
@@ -188,7 +186,7 @@ export default function AdminDashboard({
         ) : (
           <div className="space-y-4">
             {filtered.map((intake) => (
-              <IntakeCard key={intake.id} intake={intake} pw={pw} />
+              <IntakeCard key={intake.id} intake={intake} />
             ))}
           </div>
         )}
