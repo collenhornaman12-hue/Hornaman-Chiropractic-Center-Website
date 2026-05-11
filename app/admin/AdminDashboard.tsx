@@ -168,15 +168,25 @@ function PatientFormModal({
               />
               <ModalSection
                 title="Insurance"
-                rows={[
-                  {
-                    label: "Insurance Provider",
-                    value: str(raw, "insuranceProvider") || intake.insurance || "",
-                  },
-                  { label: "Payment Type", value: str(raw, "paymentType") },
-                  { label: "Policy / Member ID", value: str(raw, "insurancePolicyId") },
-                  { label: "Group Number", value: str(raw, "insuranceGroupNumber") },
-                ]}
+                rows={
+                  intake.insurance === "On file"
+                    ? [{ label: "Status", value: "Insurance on file — no changes submitted" }]
+                    : [
+                        {
+                          label: "Insurance Provider",
+                          value:
+                            str(raw, "insuranceProvider") ||
+                            str(raw, "insurance") ||
+                            intake.insurance ||
+                            "",
+                        },
+                        { label: "Member ID", value: str(raw, "memberId") || str(raw, "insurancePolicyId") },
+                        { label: "Group Number", value: str(raw, "groupNumber") || str(raw, "insuranceGroupNumber") },
+                        { label: "Policy Holder Name", value: str(raw, "policyHolderName") || str(raw, "insuredName") },
+                        { label: "Policy Holder DOB", value: str(raw, "policyHolderDob") },
+                        { label: "Payment Type", value: str(raw, "paymentType") },
+                      ]
+                }
               />
               <ModalSection
                 title="Medical History"
@@ -273,16 +283,14 @@ function IntakeCard({ intake }: { intake: Intake }) {
           )}
           {intake.email && <span className="truncate">✉ {intake.email}</span>}
 
-          {/* Appt time pill if set; fall back to DOB */}
-          {intake.appt_time ? (
+          {/* Appt time pill — only shown when set; DOB lives in the modal */}
+          {intake.appt_time && (
             <span className="sm:col-span-2">
               <span className="inline-block bg-[#203078] text-white text-xs font-bold px-3 py-1 rounded-lg tracking-wide">
                 Appt: {intake.appt_time}
               </span>
             </span>
-          ) : intake.dob ? (
-            <span className="text-gray-500">DOB: {intake.dob}</span>
-          ) : null}
+          )}
 
           {intake.insurance && <span className="truncate">Ins: {intake.insurance}</span>}
           {intake.chief_complaint && (
