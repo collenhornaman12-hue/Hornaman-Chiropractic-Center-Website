@@ -60,11 +60,37 @@ function formatDate(iso: string): string {
   });
 }
 
-function humanizeKey(key: string): string {
-  return key
-    .replace(/([A-Z])/g, " $1")
-    .replace(/^./, (s) => s.toUpperCase())
-    .trim();
+function str(raw: Record<string, unknown>, key: string): string {
+  const v = raw[key];
+  if (!v) return "";
+  if (Array.isArray(v)) return v.filter(Boolean).join(", ");
+  return String(v).trim();
+}
+
+function ModalSection({
+  title,
+  rows,
+}: {
+  title: string;
+  rows: { label: string; value: string }[];
+}) {
+  const visible = rows.filter((r) => r.value);
+  if (!visible.length) return null;
+  return (
+    <div className="mb-5">
+      <p className="text-[#c8d828] text-xs font-bold uppercase tracking-widest mb-2">
+        {title}
+      </p>
+      <div className="space-y-1.5">
+        {visible.map((r) => (
+          <div key={r.label} className="flex gap-3 text-sm">
+            <span className="text-gray-400 w-36 flex-shrink-0">{r.label}</span>
+            <span className="text-gray-800 break-words min-w-0">{r.value}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 function PatientFormModal({
@@ -75,9 +101,6 @@ function PatientFormModal({
   onClose: () => void;
 }) {
   const raw = intake.raw_data ?? {};
-  const entries = Object.entries(raw).filter(
-    ([, v]) => v !== null && v !== undefined && v !== ""
-  );
 
   return (
     <div
@@ -91,7 +114,7 @@ function PatientFormModal({
         style={{ fontFamily: "'Oswald', sans-serif" }}
       >
         {/* Modal header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
           <div>
             <p className="text-[#c8d828] text-xs font-bold uppercase tracking-widest">
               Patient Form
@@ -110,22 +133,70 @@ function PatientFormModal({
         </div>
 
         {/* Modal body */}
-        <div className="overflow-y-auto px-6 py-4 space-y-2">
-          {entries.length === 0 ? (
+        <div className="overflow-y-auto px-6 py-5">
+          {Object.keys(raw).length === 0 ? (
             <p className="text-gray-400 text-sm text-center py-8">No form data available.</p>
           ) : (
-            entries.map(([key, value]) => (
-              <div key={key} className="flex gap-3 text-sm border-b border-gray-50 pb-1.5">
-                <span className="text-gray-400 w-40 flex-shrink-0 font-medium">
-                  {humanizeKey(key)}
-                </span>
-                <span className="text-gray-800 break-words min-w-0">
-                  {Array.isArray(value)
-                    ? value.join(", ")
-                    : String(value)}
-                </span>
-              </div>
-            ))
+            <>
+              <ModalSection
+                title="Personal Information"
+                rows={[
+                  { label: "First Name", value: str(raw, "firstName") },
+                  { label: "Last Name", value: str(raw, "lastName") },
+                  { label: "Date of Birth", value: str(raw, "dob") || intake.dob },
+                  { label: "Sex at Birth", value: str(raw, "sex") },
+                  { label: "Phone Number", value: str(raw, "phone") || intake.phone },
+                  { label: "Email Address", value: str(raw, "email") || intake.email },
+                ]}
+              />
+              <ModalSection
+                title="Home Address"
+                rows={[
+                  { label: "Street Address", value: str(raw, "address") },
+                  { label: "City", value: str(raw, "city") },
+                  { label: "State", value: str(raw, "state") },
+                  { label: "ZIP Code", value: str(raw, "zip") },
+                ]}
+              />
+              <ModalSection
+                title="Emergency Contact"
+                rows={[
+                  { label: "Full Name", value: str(raw, "emergencyName") },
+                  { label: "Relationship", value: str(raw, "emergencyRelationship") },
+                  { label: "Phone Number", value: str(raw, "emergencyPhone") },
+                ]}
+              />
+              <ModalSection
+                title="Insurance"
+                rows={[
+                  {
+                    label: "Insurance Provider",
+                    value: str(raw, "insuranceProvider") || intake.insurance || "",
+                  },
+                  { label: "Payment Type", value: str(raw, "paymentType") },
+                  { label: "Policy / Member ID", value: str(raw, "insurancePolicyId") },
+                  { label: "Group Number", value: str(raw, "insuranceGroupNumber") },
+                ]}
+              />
+              <ModalSection
+                title="Medical History"
+                rows={[
+                  { label: "Conditions", value: str(raw, "medicalCondition") },
+                  { label: "Medications", value: str(raw, "medications") },
+                  { label: "Recent Scans", value: str(raw, "recentScans") },
+                  { label: "Scan Details", value: str(raw, "scanDescription") },
+                ]}
+              />
+              <ModalSection
+                title="Reason for Visit"
+                rows={[
+                  { label: "Primary Complaint", value: str(raw, "complaint") },
+                  { label: "Duration", value: str(raw, "conditionDuration") },
+                  { label: "Pain Level", value: str(raw, "painLevel") },
+                  { label: "Additional Notes", value: str(raw, "notes") },
+                ]}
+              />
+            </>
           )}
         </div>
       </div>
@@ -141,7 +212,7 @@ function IntakeCard({ intake }: { intake: Intake }) {
 
   async function updateStatus(newStatus: string) {
     const prev = status;
-    setStatus(newStatus); // optimistic
+    setStatus(newStatus);
     try {
       const res = await fetch("/api/admin/status", {
         method: "PATCH",
@@ -186,19 +257,12 @@ function IntakeCard({ intake }: { intake: Intake }) {
         </div>
 
         {/* Name */}
-        <p className="text-[#203078] text-xl font-bold uppercase tracking-wide leading-tight mb-2">
+        <p className="text-[#203078] text-xl font-bold uppercase tracking-wide leading-tight mb-3">
           {intake.name || "—"}
         </p>
 
-        {/* Appointment time box */}
-        {intake.appt_time && (
-          <div className="bg-[#203078] text-white text-sm font-bold px-3 py-1.5 rounded-lg mb-3 inline-block tracking-wide">
-            Appt: {intake.appt_time}
-          </div>
-        )}
-
         {/* Details grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm text-gray-600 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5 text-sm text-gray-600 mb-4">
           {intake.phone && (
             <a
               href={`tel:${intake.phone}`}
@@ -208,8 +272,19 @@ function IntakeCard({ intake }: { intake: Intake }) {
             </a>
           )}
           {intake.email && <span className="truncate">✉ {intake.email}</span>}
-          {intake.dob && <span>DOB: {intake.dob}</span>}
-          {intake.insurance && <span>Ins: {intake.insurance}</span>}
+
+          {/* Appt time pill if set; fall back to DOB */}
+          {intake.appt_time ? (
+            <span className="sm:col-span-2">
+              <span className="inline-block bg-[#203078] text-white text-xs font-bold px-3 py-1 rounded-lg tracking-wide">
+                Appt: {intake.appt_time}
+              </span>
+            </span>
+          ) : intake.dob ? (
+            <span className="text-gray-500">DOB: {intake.dob}</span>
+          ) : null}
+
+          {intake.insurance && <span className="truncate">Ins: {intake.insurance}</span>}
           {intake.chief_complaint && (
             <span className="sm:col-span-2 text-gray-500 italic">
               &ldquo;{intake.chief_complaint}&rdquo;
