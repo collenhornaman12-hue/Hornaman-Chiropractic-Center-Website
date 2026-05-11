@@ -13,6 +13,8 @@ type Intake = {
   chief_complaint: string;
   status: string;
   submitted_at: string;
+  appt_time?: string;
+  raw_data?: Record<string, unknown>;
 };
 
 const STATUS_OPTIONS = [
@@ -58,92 +60,189 @@ function formatDate(iso: string): string {
   });
 }
 
+function humanizeKey(key: string): string {
+  return key
+    .replace(/([A-Z])/g, " $1")
+    .replace(/^./, (s) => s.toUpperCase())
+    .trim();
+}
+
+function PatientFormModal({
+  intake,
+  onClose,
+}: {
+  intake: Intake;
+  onClose: () => void;
+}) {
+  const raw = intake.raw_data ?? {};
+  const entries = Object.entries(raw).filter(
+    ([, v]) => v !== null && v !== undefined && v !== ""
+  );
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center px-4"
+      style={{ background: "rgba(0,0,0,0.55)" }}
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+        style={{ fontFamily: "'Oswald', sans-serif" }}
+      >
+        {/* Modal header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <div>
+            <p className="text-[#c8d828] text-xs font-bold uppercase tracking-widest">
+              Patient Form
+            </p>
+            <h2 className="text-[#203078] text-lg font-bold uppercase tracking-wide leading-tight">
+              {intake.name || "—"}
+            </h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 font-bold text-lg transition-colors"
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+
+        {/* Modal body */}
+        <div className="overflow-y-auto px-6 py-4 space-y-2">
+          {entries.length === 0 ? (
+            <p className="text-gray-400 text-sm text-center py-8">No form data available.</p>
+          ) : (
+            entries.map(([key, value]) => (
+              <div key={key} className="flex gap-3 text-sm border-b border-gray-50 pb-1.5">
+                <span className="text-gray-400 w-40 flex-shrink-0 font-medium">
+                  {humanizeKey(key)}
+                </span>
+                <span className="text-gray-800 break-words min-w-0">
+                  {Array.isArray(value)
+                    ? value.join(", ")
+                    : String(value)}
+                </span>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function IntakeCard({ intake }: { intake: Intake }) {
   const [status, setStatus] = useState(intake.status || "pending");
-  const [saving, setSaving] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const current = STATUS_OPTIONS.find((s) => s.value === status) ?? STATUS_OPTIONS[0];
 
   async function updateStatus(newStatus: string) {
-    setSaving(true);
-    await fetch("/api/admin/status", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: intake.id, status: newStatus }),
-    });
-    setStatus(newStatus);
-    setSaving(false);
+    const prev = status;
+    setStatus(newStatus); // optimistic
+    try {
+      const res = await fetch("/api/admin/status", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: intake.id, status: newStatus }),
+      });
+      if (!res.ok) setStatus(prev);
+    } catch {
+      setStatus(prev);
+    }
   }
 
   return (
-    <div
-      className={`rounded-xl border-2 p-5 transition-colors ${current.cardBg}`}
-      style={{ fontFamily: "'Oswald', sans-serif" }}
-    >
-      {/* Top row: badges + timestamp */}
-      <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span
-            className={`text-xs font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
-              intake.type === "new"
-                ? "bg-[#c8d828]/25 text-[#3a4800]"
-                : "bg-[#203078]/10 text-[#203078]"
-            }`}
-          >
-            {intake.type === "new" ? "New Patient" : "Existing Patient"}
-          </span>
-          <span className={`text-xs font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full ${current.badge}`}>
-            {current.label}
+    <>
+      {showModal && (
+        <PatientFormModal intake={intake} onClose={() => setShowModal(false)} />
+      )}
+
+      <div
+        className={`rounded-xl border-2 p-5 transition-colors ${current.cardBg}`}
+        style={{ fontFamily: "'Oswald', sans-serif" }}
+      >
+        {/* Top row: badges + timestamp */}
+        <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span
+              className={`text-xs font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
+                intake.type === "new"
+                  ? "bg-[#c8d828]/25 text-[#3a4800]"
+                  : "bg-[#203078]/10 text-[#203078]"
+              }`}
+            >
+              {intake.type === "new" ? "New Patient" : "Existing Patient"}
+            </span>
+            <span className={`text-xs font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full ${current.badge}`}>
+              {current.label}
+            </span>
+          </div>
+          <span className="text-xs text-gray-400 whitespace-nowrap flex-shrink-0">
+            {formatDate(intake.submitted_at)}
           </span>
         </div>
-        <span className="text-xs text-gray-400 whitespace-nowrap flex-shrink-0">
-          {formatDate(intake.submitted_at)}
-        </span>
-      </div>
 
-      {/* Name */}
-      <p className="text-[#203078] text-xl font-bold uppercase tracking-wide leading-tight mb-3">
-        {intake.name || "—"}
-      </p>
+        {/* Name */}
+        <p className="text-[#203078] text-xl font-bold uppercase tracking-wide leading-tight mb-2">
+          {intake.name || "—"}
+        </p>
 
-      {/* Details grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm text-gray-600 mb-4">
-        {intake.phone && (
-          <a
-            href={`tel:${intake.phone}`}
-            className="font-semibold text-[#203078] hover:text-[#c8d828] transition-colors"
-          >
-            📞 {intake.phone}
-          </a>
+        {/* Appointment time box */}
+        {intake.appt_time && (
+          <div className="bg-[#203078] text-white text-sm font-bold px-3 py-1.5 rounded-lg mb-3 inline-block tracking-wide">
+            Appt: {intake.appt_time}
+          </div>
         )}
-        {intake.email && <span className="truncate">✉ {intake.email}</span>}
-        {intake.dob && <span>DOB: {intake.dob}</span>}
-        {intake.insurance && <span>Ins: {intake.insurance}</span>}
-        {intake.chief_complaint && (
-          <span className="sm:col-span-2 text-gray-500 italic">
-            &ldquo;{intake.chief_complaint}&rdquo;
-          </span>
-        )}
-      </div>
 
-      {/* Status buttons */}
-      <div className="flex flex-wrap gap-2">
-        {STATUS_OPTIONS.map((opt) => (
+        {/* Details grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm text-gray-600 mb-4">
+          {intake.phone && (
+            <a
+              href={`tel:${intake.phone}`}
+              className="font-semibold text-[#203078] hover:text-[#c8d828] transition-colors"
+            >
+              📞 {intake.phone}
+            </a>
+          )}
+          {intake.email && <span className="truncate">✉ {intake.email}</span>}
+          {intake.dob && <span>DOB: {intake.dob}</span>}
+          {intake.insurance && <span>Ins: {intake.insurance}</span>}
+          {intake.chief_complaint && (
+            <span className="sm:col-span-2 text-gray-500 italic">
+              &ldquo;{intake.chief_complaint}&rdquo;
+            </span>
+          )}
+        </div>
+
+        {/* Bottom row: status buttons + patient form button */}
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap gap-2">
+            {STATUS_OPTIONS.map((opt) => (
+              <button
+                key={opt.value}
+                onClick={() => updateStatus(opt.value)}
+                className={`px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border-2 transition-all ${
+                  status === opt.value
+                    ? `${opt.btn} opacity-100`
+                    : "bg-white text-gray-400 border-gray-200 hover:border-[#203078]/40 hover:text-[#203078]"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
           <button
-            key={opt.value}
-            onClick={() => updateStatus(opt.value)}
-            disabled={saving}
-            className={`px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border-2 transition-all disabled:opacity-40 ${
-              status === opt.value
-                ? `${opt.btn} opacity-100`
-                : "bg-white text-gray-400 border-gray-200 hover:border-[#203078]/40 hover:text-[#203078]"
-            }`}
+            onClick={() => setShowModal(true)}
+            className="px-3 py-1 rounded text-xs font-bold uppercase tracking-wider border-2 border-[#203078]/30 text-[#203078] bg-white hover:bg-[#203078] hover:text-white transition-colors flex-shrink-0"
           >
-            {opt.label}
+            Patient Form
           </button>
-        ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

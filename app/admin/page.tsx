@@ -16,11 +16,13 @@ type Intake = {
   chief_complaint: string;
   status: string;
   submitted_at: string;
+  appt_time?: string;
+  raw_data?: Record<string, unknown>;
 };
 
 async function getIntakes(): Promise<Intake[]> {
   const res = await fetch(
-    `${process.env.SUPABASE_URL}/rest/v1/patient_intake?order=submitted_at.desc&limit=200`,
+    `${process.env.SUPABASE_URL}/rest/v1/patient_intake?select=id,type,name,phone,email,dob,insurance,chief_complaint,status,submitted_at,appt_time,raw_data&order=submitted_at.desc&limit=200`,
     {
       headers: {
         apikey: process.env.SUPABASE_SERVICE_KEY!,

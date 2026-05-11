@@ -14,7 +14,16 @@ export default function ExistingPatientPage() {
     setSubmitting(true);
     const formData = new FormData(e.currentTarget);
     await fetch("/api/existing-patient", { method: "POST", body: formData });
-    router.push("https://cal.com/hornamanchiropracticcenter/existing-patient");
+    const firstName = (formData.get("firstName") as string) || "";
+    const lastName = (formData.get("lastName") as string) || "";
+    const email = (formData.get("email") as string) || "";
+    const phone = (formData.get("phone") as string) || "";
+    const params = new URLSearchParams({
+      name: `${firstName} ${lastName}`.trim(),
+      email,
+      phone,
+    });
+    router.push(`https://cal.com/hornamanchiropracticcenter/existing-patient?${params.toString()}`);
   }
 
   return (
