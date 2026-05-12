@@ -22,25 +22,26 @@ export async function POST(req: NextRequest) {
 
     const calBody = await calRes.text();
 
-    if (!calRes.ok) {
-      return NextResponse.json({ error: "Cal.com failed", calStatus: calRes.status, calBody }, { status: 500 });
+    if (calRes.ok) {
+      await fetch(
+        `${process.env.SUPABASE_URL}/rest/v1/patient_intake?id=eq.${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            apikey: process.env.SUPABASE_SERVICE_KEY!,
+            Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+            "Content-Type": "application/json",
+            Prefer: "return=minimal",
+          },
+          body: JSON.stringify({ status: "scheduled" }),
+        }
+      );
     }
 
-    await fetch(
-      `${process.env.SUPABASE_URL}/rest/v1/patient_intake?id=eq.${id}`,
-      {
-        method: "PATCH",
-        headers: {
-          apikey: process.env.SUPABASE_SERVICE_KEY!,
-          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
-          "Content-Type": "application/json",
-          Prefer: "return=minimal",
-        },
-        body: JSON.stringify({ status: "scheduled" }),
-      }
+    return NextResponse.json(
+      { success: calRes.ok, calStatus: calRes.status, calBody, cal_booking_uid_sent: cal_booking_uid },
+      { status: calRes.ok ? 200 : 500 }
     );
-
-    return NextResponse.json({ success: true, calStatus: calRes.status });
 
   } catch (err: unknown) {
     const e = err as { message?: string };
