@@ -259,7 +259,7 @@ function IntakeCard({ intake }: { intake: Intake }) {
         setStatus("scheduled");
       } else {
         const data = await res.json().catch(() => ({}));
-        setActionError(`Approve failed (${res.status}): ${data.detail || data.error || "unknown error"}`);
+        setActionError(`Approve failed (${res.status}): ${data.calBody || data.error || JSON.stringify(data)}`);
       }
     } catch (e) {
       setActionError(`Approve failed: ${e instanceof Error ? e.message : String(e)}`);
@@ -290,7 +290,7 @@ function IntakeCard({ intake }: { intake: Intake }) {
         setShowRejectInput(false);
       } else {
         const data = await res.json().catch(() => ({}));
-        setActionError(`Reject failed (${res.status}): ${data.detail || data.error || "unknown error"}`);
+        setActionError(`Reject failed (${res.status}): ${data.calBody || data.error || JSON.stringify(data)}`);
       }
     } catch (e) {
       setActionError(`Reject failed: ${e instanceof Error ? e.message : String(e)}`);
