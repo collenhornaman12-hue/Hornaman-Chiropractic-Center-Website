@@ -42,6 +42,26 @@ export async function POST(req: NextRequest) {
     // Full raw body dump
     console.log("Cal webhook RAW BODY:", JSON.stringify(body));
 
+    // Debug: store full payload as a row so we can inspect raw_data in Supabase
+    await fetch(
+      `${process.env.SUPABASE_URL}/rest/v1/patient_intake`,
+      {
+        method: "POST",
+        headers: {
+          apikey: process.env.SUPABASE_SERVICE_KEY!,
+          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_KEY}`,
+          "Content-Type": "application/json",
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify({
+          type: "webhook_debug",
+          name: "DEBUG",
+          raw_data: body,
+          status: "pending",
+        }),
+      }
+    );
+
     const payload = body.payload ?? body;
 
     // Full payload dump
