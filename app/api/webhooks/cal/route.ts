@@ -38,9 +38,25 @@ async function searchIntake(
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    console.log("Cal webhook received:", JSON.stringify(body));
+
+    // Full raw body dump
+    console.log("Cal webhook RAW BODY:", JSON.stringify(body));
 
     const payload = body.payload ?? body;
+
+    // Full payload dump
+    console.log("Cal webhook PAYLOAD:", JSON.stringify(payload));
+
+    // Every possible UID field
+    console.log("Cal webhook UID FIELDS:", JSON.stringify({
+      "body.uid": body?.uid,
+      "body.bookingId": body?.bookingId,
+      "body.payload?.uid": body?.payload?.uid,
+      "body.payload?.id": body?.payload?.id,
+      "payload.uid": payload?.uid,
+      "payload.bookingId": payload?.bookingId,
+      "payload.id": payload?.id,
+    }));
 
     const email: string | null =
       payload?.attendee?.email ||
