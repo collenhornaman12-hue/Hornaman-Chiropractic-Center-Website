@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { id, cal_booking_uid } = await req.json();
+    const { id, cal_booking_uid, reason } = await req.json();
 
     console.log("Admin reject: received id:", id, "cal_booking_uid:", cal_booking_uid, "reason:", reason);
 
