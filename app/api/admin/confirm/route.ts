@@ -162,7 +162,12 @@ Hornaman Chiropractic Center
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
-            personalizations: [{ to: [{ email: patientEmail }] }],
+            personalizations: [{
+              to: [{ email: patientEmail }],
+              dkim_domain: "hornamanchiropracticcenter.com",
+              dkim_selector: "mailchannels",
+              dkim_private_key: process.env.DKIM_PRIVATE_KEY ?? "",
+            }],
             from: {
               email: "forms@hornamanchiropracticcenter.com",
               name: "Hornaman Chiropractic Center",
