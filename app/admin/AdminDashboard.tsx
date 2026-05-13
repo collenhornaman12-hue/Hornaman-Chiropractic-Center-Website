@@ -350,13 +350,15 @@ function IntakeCard({ intake }: { intake: Intake }) {
           )}
           {intake.email && <span className="truncate">✉ {intake.email}</span>}
 
-          {apptTime && (
-            <span className="sm:col-span-2">
+          <span className="sm:col-span-2">
+            {apptTime ? (
               <span className="inline-block bg-[#203078] text-white text-xs font-bold px-3 py-1 rounded-lg tracking-wide">
                 Appt: {apptTime}
               </span>
-            </span>
-          )}
+            ) : (
+              <span className="text-xs text-gray-400 italic">Appt time pending</span>
+            )}
+          </span>
 
           {intake.insurance && <span className="truncate">Ins: {intake.insurance}</span>}
           {intake.chief_complaint && (
