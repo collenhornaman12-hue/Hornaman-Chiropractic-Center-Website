@@ -157,6 +157,7 @@ Hornaman Chiropractic Center
 107 N. Main St., Union City, PA 16438`;
 
       try {
+        console.log("confirm: sending confirmation email to:", patientEmail);
         const mcRes = await fetch("https://api.mailchannels.net/tx/v1/send", {
           method: "POST",
           headers: { "content-type": "application/json" },
@@ -170,7 +171,8 @@ Hornaman Chiropractic Center
             content: [{ type: "text/plain", value: emailBody }],
           }),
         });
-        console.log("confirm: MailChannels response status:", mcRes.status);
+        const mcBody = await mcRes.text();
+        console.log("confirm: MailChannels status:", mcRes.status, "body:", mcBody);
       } catch (e) {
         console.error("confirm: MailChannels send failed:", e);
       }
