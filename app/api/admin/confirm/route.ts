@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
 
     // Fetch patient row for email, name, and appt_time fallback
     const patientRes = await fetch(
-      `${process.env.SUPABASE_URL}/rest/v1/patient_intake?id=eq.${id}&select=email,name,appt_time`,
+      `${process.env.SUPABASE_URL}/rest/v1/patient_intake?id=eq.${id}&select=email,name,appt_time,phone`,
       {
         headers: {
           apikey: process.env.SUPABASE_SERVICE_KEY!,
@@ -52,11 +52,18 @@ export async function POST(req: NextRequest) {
         },
       }
     );
-    const patientRows: Array<{ email: string | null; name: string | null; appt_time: string | null }> =
+    const patientRows: Array<{ email: string | null; name: string | null; appt_time: string | null; phone: string | null }> =
       patientRes.ok ? await patientRes.json() : [];
     const patientEmail = patientRows[0]?.email ?? null;
     const patientName = patientRows[0]?.name ?? "there";
     const existingApptTime = patientRows[0]?.appt_time ?? null;
+    const patientPhone = patientRows[0]?.phone ?? null;
+
+    if (patientEmail) {
+      console.log("confirm: patientEmail found:", patientEmail);
+    } else {
+      console.log("confirm: no patientEmail, skipping email send");
+    }
 
     // Confirm booking with Cal.com
     const calRes = await fetch(
@@ -150,7 +157,7 @@ Hornaman Chiropractic Center
 107 N. Main St., Union City, PA 16438`;
 
       try {
-        await fetch("https://api.mailchannels.net/tx/v1/send", {
+        const mcRes = await fetch("https://api.mailchannels.net/tx/v1/send", {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
@@ -163,6 +170,7 @@ Hornaman Chiropractic Center
             content: [{ type: "text/plain", value: emailBody }],
           }),
         });
+        console.log("confirm: MailChannels response status:", mcRes.status);
       } catch (e) {
         console.error("confirm: MailChannels send failed:", e);
       }

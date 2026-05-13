@@ -62,7 +62,6 @@ export async function POST(req: NextRequest) {
     const payload = body.payload ?? body;
 
     console.log("Cal webhook triggerEvent:", triggerEvent);
-    console.log("Cal webhook RAW BODY:", JSON.stringify(body));
 
     const email: string | null =
       payload?.attendee?.email ||
