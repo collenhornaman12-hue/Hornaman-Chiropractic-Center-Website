@@ -78,6 +78,9 @@ export default function Footer() {
             © {new Date().getFullYear()} Hornaman Chiropractic Center — Union City, PA. All rights reserved.
           </p>
           <div className="flex flex-wrap gap-4 text-xs text-white/30">
+            <a href="/admin" className="hover:text-white/60 transition-colors">
+              Admin
+            </a>
             <a href="/privacy-policy" className="hover:text-white/60 transition-colors">
               Privacy Policy
             </a>
