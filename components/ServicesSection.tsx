@@ -1,4 +1,4 @@
-import { Bone, ArrowLeftRight, Hand, Trophy, Car, PersonStanding } from "lucide-react";
+import { Bone, ArrowLeftRight, Truck, Trophy, Car, PersonStanding } from "lucide-react";
 
 const services = [
   {
@@ -14,7 +14,7 @@ const services = [
       "Non-surgical traction therapy to gently stretch the spine and relieve pressure on compressed discs and nerves.",
   },
   {
-    icon: FileText,
+    icon: Truck,
     title: "DOT Physicals",
     description:
       "Certified Department of Transportation (DOT) physical examinations to keep your commercial driver's license compliant and safely on the road.",
