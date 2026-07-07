@@ -14,7 +14,8 @@ export async function POST(req: NextRequest) {
     {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.CAL_API_KEY}`,
+        "x-cal-secret-key": process.env.CAL_API_KEY!,
+        "cal-api-version": "2024-08-13",
         "Content-Type": "application/json",
       },
     }
