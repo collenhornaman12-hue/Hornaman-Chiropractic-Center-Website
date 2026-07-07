@@ -17,7 +17,7 @@ export default function AboutSection() {
           {/* Billboard image */}
           <div className="order-2 lg:order-1">
             <Image
-              src="/6x12 Hornaman Chiropractic GOT PAIN Billboard side 2.jpeg"
+              src="/6x12 Hornaman Chiropractic Headshot Billboard side 1.jpeg"
               alt="Dr. Thomas J. Hornaman — Hornaman Chiropractic Center"
               width={1200}
               height={624}
